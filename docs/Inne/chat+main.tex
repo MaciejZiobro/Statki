@@ -1,0 +1,80 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\newgeometry{tmargin=2cm, bmargin=2cm, lmargin=2cm, rmargin=2cm}
+\linespread{1.75} 
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{xcolor}
+\usepackage[export]{adjustbox}
+\usepackage{mathtools}
+\usepackage[document]{ragged2e}
+\usepackage{float}
+\usepackage{eucal}
+\usepackage{titlesec}
+\usepackage{scrextend}
+\usepackage{tikz}
+\usepackage{subfiles}
+\usepackage{siunitx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usetikzlibrary{calc,patterns,angles,quotes}
+\everymath{\displaystyle}
+
+\title{Dokumentacja gry w statki}
+\author{Maciej Ziobro}
+\date{\today}
+
+
+\lstset{
+    basicstyle=\ttfamily,
+    backgroundcolor=\color{white},
+    frame=single,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    language=Python,
+}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\section{Wstęp}
+Ten dokument zawiera dokumentację dla gry w statki zaimplementowanej w języku Python przy użyciu biblioteki Pygame.
+
+\section{Przegląd Kodu}
+Gra składa się z kilku modułów, w tym ship.py, ppoints.py i bot.py. Główna logika gry jest obecna w dostarczonym skrypcie Pythona.
+
+\section{Funkcjonalności}
+\subsection{Rozmieszczenie Statków}
+Funkcja \texttt{ships\_placement} generuje początkowe rozmieszczenie statków na planszy gry. Przyjmuje listę rozmiarów statków jako argument i zwraca listę obiektów statków.
+
+\subsection{Graficzny Interfejs Użytkownika (GUI)}
+Gra korzysta z Pygame do interfejsu graficznego. Inicjalizuje środowisko Pygame, definiuje kolory i obsługuje zdarzenia, takie jak zakończenie gry.
+
+\subsection{Główna Pętla Gry}
+Główna pętla gry kontroluje przebieg gry. Obsługuje ruchy gracza i bota, aktualizuje wyświetlanie i sprawdza zakończenie gry.
+
+\subsection{Menu}
+Gra zawiera menu startowe i końcowe. Funkcja \texttt{start\_menu} pozwala graczowi wybrać, kto rozpocznie grę, natomiast funkcja \texttt{end\_menu} prosi gracza o ponowną grę lub wyjście.
+
+\section{Struktura Kodu}
+Kod jest zorganizowany na logiczne sekcje, takie jak rozmieszczenie statków, GUI, menu i główna pętla gry. Każda sekcja jest czytelnie skomentowana, co ułatwia czytanie kodu.
+
+\section{Zależności}
+Gra polega na bibliotece Pygame do renderowania grafiki. Upewnij się, że Pygame jest zainstalowane przed uruchomieniem kodu.
+
+\section{Podsumowanie}
+Dostarczony skrypt w Pythonie implementuje prostą grę w statki z graficznym interfejsem użytkownika. Oferuje przyjemne doświadczenie z połączeniem strategicznego rozmieszczenia statków i turowej walki.
+
+\end{document}

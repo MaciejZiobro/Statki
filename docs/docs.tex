@@ -1,0 +1,287 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\newgeometry{tmargin=2cm, bmargin=2cm, lmargin=2cm, rmargin=2cm}
+\linespread{1.75} 
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{xcolor}
+\usepackage[export]{adjustbox}
+\usepackage{mathtools}
+\usepackage[document]{ragged2e}
+\usepackage{float}
+\usepackage{eucal}
+\usepackage{titlesec}
+\usepackage{scrextend}
+\usepackage{tikz}
+\usepackage{subfiles}
+\usepackage{siunitx}
+\usepackage{todonotes}
+\usepackage{pgfplots}
+\usetikzlibrary{calc,patterns,angles,quotes}
+\everymath{\displaystyle}
+
+\title{Dokumentacja gry w statki}
+\author{Maciej Ziobro}
+\date{\today}
+
+\begin{document}
+\maketitle
+\newpage
+
+\section{Wprowadzenie}
+$\qquad$Kod ten jest implementacją gry w statki. Celem gry jest zatopienie wszytkich okrętów przeciwnika zanim on zrobi to samo. 
+Każdy ruch składa się z wybrania pola lewym przyciskiem myszy. Kliknięcie na pole, jest równozanczne ze strzałem w to pole.
+Jeśli strzał trafi w okręt, to pole zmieni wygląd. Jeśli strzał nie trafi w okręt, to pole zostanie oznaczone białą kropką.
+Te same oznaczania obowiązują po stronie przeciwnika (bota), z dodatkiem pola zaznaczonego na czerwono, które oznacza
+ostatni ruch bota. Dodatkowo okręt całkowicie zatopiony zmienia swój wygląd. Gracz może też prawym przyciskiem myszy
+oznaczyć dla siebie pola czarną kropką - oznacznie to nie ma żadnego wpływy na rozgrywke.\\
+$\qquad$Każdą rozgrywke gracz znaczyna od wyboru kto wykona pierwszy ruch, istnieje też możliwość wyboru losowego. 
+Po kożdej rozgrywcę gracz może wybrać czy chce zagrać ponownie, czy też zakończyć grę.\\ 
+
+\section{Plik 1: ppoints.py}
+    \subsection{Opis Modułu}
+        Moduł dostarcza klase \texttt{Point} reprezentującą punkt na płaszczyźnie. 
+
+    \subsection{Klasa \texttt{Point}}
+        Klasa \texttt{Point} reprezentuje punkt na płaszczyźnie. Inne części programu korzystają z tej klasy do reprezentacji pól na planszy, pól 
+        zajmowanych przez statki, itp. Do inicjalizacji obiektu klasy \texttt{Point} potrzebne są współrzędne x i y punktu. 
+        Klasa \texttt{Point} dostarcza też metod do porównywania punktów, oraz ich tekstowej reprezentacji.
+
+\section{Plik 2: ship.py}
+    \subsection{Klasa \texttt{Ship}}
+        Klasa \texttt{Ship} reprezentuje statek. Z obiektu statku możemy otrzymać informacje o jego położeniu, długości, zajmowanych polach, polach dookoła,
+        o tym które jego pola zostały trafione, oraz o tym czy został zniszczony.
+
+    \subsection{Metoda \_\_init\_\_}
+        \begin{verbatim}
+            def __init__(self, x1, y1, orientation, length):
+        \end{verbatim}
+
+        Inicjalizuje obiekt klasy Ship.
+
+        \subsubsection*{Argumenty}
+            \begin{itemize}
+                \item \texttt{x1 (int)}: Współrzędna x lewego górnego punktu statku.
+                \item \texttt{y1 (int)}: Współrzędna y lewego górnego punktu statku.
+                \item \texttt{orientation (bool)}: Orientacja statku: True dla położenia poziomego, False dla pionowego.
+                \item \texttt{length (int)}: Długość statku.
+            \end{itemize}
+
+        \subsubsection*{Zwraca}
+        None
+
+    \subsection{Metoda \_\_str\_\_}
+        \textbf{Zwraca}
+        \begin{itemize}
+            \item \texttt{str}: Reprezentacja tekstowa obiektu klasy Ship.
+        \end{itemize}
+        
+
+    \subsection{Właściwość \texttt{is\_destroyed}}
+            Sprawdza, czy statek został zniszczony poprzez sprawdzenie, czy wszystkie jego punkty zostały trafione.
+
+        \textbf{Zwraca}
+        \begin{itemize}
+            \item \texttt{bool}: True, jeśli statek został zniszczony, False w przeciwnym razie.
+        \end{itemize}
+        
+
+    \subsection{Właściwość \texttt{is\_destroyed\_draw}}
+        Sprawdza, czy statek został zniszczony.
+        Jest to kopia metody \texttt{is\_destroyed}, która jest używana tylko do wyświetlania statków.
+
+        \textbf{Zwraca}
+        \begin{itemize}
+            \item \texttt{bool}: True, jeśli statek został zniszczony, False w przeciwnym razie.
+        \end{itemize}
+
+    \subsection{Metoda \texttt{list\_of\_points}}
+        \textbf{Zwraca}
+        \begin{itemize}
+            \item \texttt{list}: Lista obiektów Point, przedstawiających punkty zajmowane przez statek.
+        \end{itemize}
+
+    \subsection{Metoda \texttt{extend\_list\_of\_points}}
+        \textbf{Zwraca}
+        \begin{itemize}
+            \item \texttt{set}: Zbiór obiektów Point, przedstawiających punkty zajmowane przez statek i pola sąsiednie.
+        \end{itemize}
+
+    \subsection{Metoda \texttt{strike}}
+        Oznacza punkt statku jak trafiony.
+
+        \textbf{Argumenty}
+        \begin{itemize}
+            \item \texttt{point (Point)}: Punkt do oznaczenia jako trafiony.
+        \end{itemize}
+
+
+    \subsection{Metoda \texttt{strike\_draw}}
+        Oznacza punkt jako trafiony przez statek. Jest kopią metody \texttt{strike} natomiast słóży do wyświetlania statków.
+
+        \textbf{Argumenty}
+            \begin{itemize}
+                \item \texttt{point (Point)}: Punkt do oznaczenia jako trafiony.
+            \end{itemize}
+
+
+
+
+\section{Plik 3: bot.py}
+    \subsection{Opis Modułu}
+        Moduł ma na celu symulowanie bota, będącego przeciwnikiem gracza. Bot wykonuje ruchy w sposób losowy, 
+        jednak po trafieniu w statek dostosowuje swoją strategię do sytuacji. Główna funckja modułu jest \texttt{bot\_move}, a wszytkie
+        pozostałe funckje są wywoływane przez nią.
+
+    \subsection{Funkcja \texttt{bot\_move}}
+        Jest to główna funckja modułu, która wykonuje ruchy bota. Jeżeli bot nie trafił w żaden statek to wywołując 
+        funkcję \texttt{new\_move}, wybiera losowe pole. Jeżeli bot trafił w statek, to wywołuje funkcję \texttt{after\_strike\_move},
+        która wybiera kolejne pola do strzału. Tak długo jak bot nie zestrzeli wszystkich statków przeciwnika, 
+        będzie wykonywał ruchy w sposób opisany powyżej, i dodawał je do listy ruchów.\\
+        \textbf{Argumenty}
+            \begin{itemize}
+                \item \texttt{ships\_placment (list)}: Lista obiektów klasy Ship, przedstawiająca statki gracza.
+            \end{itemize}
+
+        \textbf{Zwraca}
+            \begin{itemize}
+                \item \texttt{list\_of\_moves (list)}: Lista obiektów klasy Point, przedstawiająca ruchy kolejne bota.
+            \end{itemize}
+
+
+    \subsection{Funkcja \texttt{new\_move}}
+        Funkcja wybiera losowe pole, następnie sprawdza czy pole to nie zostało już użyte (bot ma informacje, że
+        na tym polu na pewno nie ma niezatopionego statku). Jeżeli pole nie zostało użyte, to jest zwracane jako ruch bota.
+        W przeciwnym przypadku losowanie jest powtarzane.
+        Dodatkowym sprawdzeniem jest to, wykonywane przez funkcję \texttt{ship\_space} - opisną w dalszej części dokumentacji.\\
+        \textbf{Argumenty}
+            \begin{itemize}
+                \item \texttt{ships\_placment (list)}: Lista obiektów klasy Ship, przedstawiająca statki gracza.
+                \item \texttt{points\_used (list)}: Lista obiektów klasy Point, mówi o punktach użytych przez bota lub takich o których wiadomo, że nie ma tam statku.
+                \item \texttt{current\_ship (list)}: Lista obiektów klasy Point, zawiera punkty statku, który został trafiony ale nie zatopiony - jest aktualnie atakowany przez bota.
+            \end{itemize}
+        \textbf{Zwraca}
+            \begin{itemize}
+                \item \texttt{point (Point)}: Obiekt klasy Point, oznaczający następny ruch bota.
+            \end{itemize}
+
+    \subsection{Funkcja \texttt{after\_strike\_move}}
+    Funkcja na początek sprawdza, czy znany jest tylko jeden punkt statku, który został trafiony.
+    Jeżeli tak, to funckja losuje jedno pole z listy pól dookoła tego punktu. Następnie sprawdza czy pole to nie zostało już użyte 
+    (bot ma informacje, że na tym polu na pewno nie ma niezatopionego statku). Jeżeli pole nie zostało użyte, to jest zwracane jako ruch bota.
+    W przeciwnym przypadku losowanie jest powtarzane. 
+    Jeżeli nastomiast znane są dwa lub więcej punkty statku, które zostały trafione, to funckja losuje jedno pole z listy pól dookoła tych punktów 
+    z uwzględnieniem tego w jakim kierunku położony jest statek. Następnie sprawdza czy pole to nie zostało już użyte.
+    Dodatkowym sprawdzeniem jest to, wykonywane przez funkcję \texttt{ship\_space} - opisną w dalszej części dokumentacji.\\
+    \textbf{Argumenty}
+        \begin{itemize}
+            \item \texttt{ships\_placment (list)}: Lista obiektów klasy Ship, przedstawiająca statki gracza.
+            \item \texttt{points\_used (list)}: Lista obiektów klasy Point, mówi o punktach użytych przez bota lub takich o których wiadomo, że nie ma tam statku.
+            \item \texttt{current\_ship (list)}: Lista obiektów klasy Point, zawiera punkty statku, który został trafiony ale nie zatopiony - jest aktualnie atakowany przez bota.
+        \end{itemize}
+    \textbf{Zwraca}
+        \begin{itemize}
+            \item \texttt{point (Point)}: Punkt oznaczający następny ruch bota.
+        \end{itemize}
+
+    \subsection{Funkcja \texttt{ship\_space}}
+    Funkcja sprawdza czy w danym kierunku jest dostępna przestrzeń dla najmniejszego niezatopionego statku.
+        \textbf{Argumenty}
+        \begin{itemize}
+            \item \texttt{point (Point)}: Lista obiektów klasy Point, zawiera punkty statku, który został trafiony ale nie zatopiony - jest aktualnie atakowany przez bota.
+            \item \texttt{points\_used (list)}: Lista obiektów klasy Point, mówi o punktach użytych przez bota lub takich o których wiadomo, że nie ma tam statku.
+            \item \texttt{ships\_placment (list)}: Lista obiektów klasy Ship, przedstawiająca statki gracza.
+        \end{itemize}
+    \textbf{Zwraca}
+        \begin{itemize}
+            \item \texttt{space (list)}: Lista dwóch wartości bool, mówiąca o tym czy w danym kierunku jest dostępna przestrzeń dla najmniejszego niezatopionego statku.
+        \end{itemize}
+
+
+\section{Plik 4: main.py}
+    \subsection{Opis Modułu}
+        Moduł zawiera główną część programu. Zawiera cały kod odpowiedzialny za GUI gry.
+
+    \subsection{Funkcja \texttt{ships\_placement}}
+        Funkcja generuje rozmieszczenie statków na planszy gry. Na początku tworzy zbiór punktów z których będą losowane 
+        punkty początkowe statków. Następnie dla każdego rozmiaru statku z listy, losuje statki w odpowiedniej ilości.
+        W trakcie procesu losowania sprawdzane jest czy statek może zostać umieszczony na planszy. 
+        Jeśli nie, to całe losowanie jest powtarzane. Dodatkowo w sytuacji, w której nie można umieścić już żadnego statku,
+        na planszy, funkcja jest wywoływana ponownie.\\
+        
+        \textbf{Argumenty}
+            \begin{itemize}
+                \item \texttt{list\_of\_sizes (list)}: Lista ilości statków poszczególnego rozmiaru od największego do najmniejszego.
+                        Zgodnie z standardowymi regułami gry w statki, mamy 1 statek o długości 4, 2 statki o długości 3, 
+                        3 statki o długości 2 i 4 statki o długości 1.
+            \end{itemize}
+        
+        \textbf{Zwraca}
+            \begin{itemize}
+                \item \texttt{list\_of\_ships (list)}: Lista obiektów klasy Ship, reprezentujących rozmieszczenie statków.
+            \end{itemize}
+        
+    \subsection{GUI}
+    Druga część modułu zaczyna się od pętli \texttt{while}, która jest odpowiedzialna za zresetowanie
+    gry gdyby gracz chciał zagrać ponownie. W pętli kolejno znajdują się:
+    \begin{enumerate}
+        \item Ustawienia początkowe FPS
+        \item Utworzenie listy statków gracza i bota poprzez wywołanie funkcji \texttt{ships\_placement}
+        \item Utworzenie listy ruchów bota poprzez wywołanie funkcji \texttt{bot\_move} z modułu \texttt{bot.py}
+        \item Utworzenie list obiektów \texttt{pygame.Rect} reprezentujących pola planszy gracza i bota
+        \item Definicje stały związanych z wyświetalniem elementów na ekranie
+        \item Definicje czcionek
+        \item Funkcja \texttt{start\_menu}, odpowiedzialną za wyświetlenie menu startowego\\
+            \begin{itemize}
+                \item Funkcja pozwala na wybór kto wykona pierwszy ruch, co rozpoczyna rozgrywke
+            \end{itemize}
+        \item Funckja \texttt{end\_menu}, odpowiedzialną za wyświetlenie menu końcowego\\
+            \begin{itemize}
+                \item Funkcja pozwala na wybór czy gracz chce zagrać ponownie, czy wyjść z gry
+            \end{itemize}
+        \item Inicjalizacja obrazków, które potem będą użyte do wyświetlania pól
+        \item Zmienne pomocnicze - opisane komentarzami w kodzie
+        \item Pętla \texttt{while}, która jest główną pętlą gry\\
+            \begin{enumerate}
+                \item Pętla \texttt{for}, która obsługuje eventy \texttt{pygame.event}\\
+                      Pętla obsługuje kliknięcia myszy, oraz wyjście z gry.
+                    \begin{itemize}
+                        \item Lewy przycisk myszy - strzał gracza
+                        \item Prawy przycisk myszy - oznaczenie pola (nie ma wpływu na rozgrywke)
+                    \end{itemize}
+                \item Sprawdzenie czy gracz wygrał
+                \item Wykonanie ruchu bota
+                \item Sprawdzenie czy bot wygrał
+                \item Dodanie napisów na ekranie
+                \begin{itemize}
+                    \item Podpisy pól
+                    \item Napis informujący o tym ile danych statków dana strona gry ma, i czy są zatopione
+                    \item Napis informujący czyja tura nastepuje
+                \end{itemize}
+                \item Seria pętali \texttt{for}, odpowidzialnych za wyświetlenie pól\\
+                    \begin{itemize}
+                        \item Wyświetlenie wszytkich pól z tłem morza
+                        \item Zaznacznie wszytkich pól, które zostały użyte przez zarówno gracza jak i bota - biała kropka
+                        \item Rysowanie statków z uwzględnieniem rozróżnienia na zniszczone, trafione i nietrafione
+                        \item Zaznacznie pól oznaczonych przez gracza czarną kropką
+                        \item Zaznacznie ostatniego ruchu bota czerwoną kropką
+                    \end{itemize}
+                \item Wyświetlenie napisów końcowych oraz wywołanie funkcji \texttt{end\_menu} w przypadku wygranej jednej ze stron
+            \end{enumerate}
+
+        
+    \end{enumerate}
+     
+
+
+
+
+
+\end{document}
